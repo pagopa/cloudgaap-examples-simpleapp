@@ -1,16 +1,29 @@
 const express = require("express");
-const router = express.Router();
-const db = require("../config/database");
 
-router.get("/", (req, res) => {
-  res.render("create");
-});
+function createGETHandler() {
+  return function (_req, res) {
+    res.render("create");
+  };
+}
 
-router.post("/", async (req, res) => {
-  const query = `INSERT INTO Note(title,body) VALUES($1,$2) RETURNING *;`;
-  const values = [req.body.title, req.body.body];
-  await db.query(query, values);
-  res.redirect("/");
-});
+function createPOSTHandler(pgClient) {
+  return async function (req, res) {
+    const query = `INSERT INTO Note(title,body) VALUES($1,$2) RETURNING *;`;
+    const values = [req.body.title, req.body.body];
 
-module.exports = router;
+    await pgClient.query(query, values);
+    res.redirect("/");
+  };
+}
+
+function makeCreateRouter(pgClient) {
+  const router = express.Router();
+
+  router.get("/", createGETHandler());
+
+  router.post("/", createPOSTHandler(pgClient));
+
+  return router;
+}
+
+module.exports = { makeCreateRouter };

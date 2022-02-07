@@ -1,21 +1,24 @@
 {
-  "name": "postgres-tutorial",
+  "name": "cloudgaap-examples-simpleapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple application for CloudGaaP",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:default": "node -r dotenv/config index.js dotenv_config_path=.env.default",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.7",
     "pg": "^8.5.1",
     "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
   }
 }

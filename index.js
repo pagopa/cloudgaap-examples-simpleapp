@@ -1,38 +1,40 @@
-const db = require("./config/database");
 const express = require("express");
 const morgan = require("morgan");
-const create = require("./routes/create");
-const read = require("./routes/read.js");
-const update = require("./routes/update");
-const del = require("./routes/del");
-const init = require("./routes/init");
-const app = express();
 
-//configuring express
-app.set("view engine", "pug");
+const { makePGClient } = require("./clients/pg");
+const { makeIndexRouter } = require("./routes");
+const { makeCreateRouter } = require("./routes/create");
+const { makeDeleteRouter } = require("./routes/delete");
+const { makeReadRouter } = require("./routes/read.js");
+const { makeUpdateRouter } = require("./routes/update");
 
-//middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+const SERVER_PORT = process.env.PORT;
+const PG_CONNECTION_STRING = process.env.PG_CONNECTION_STRING;
 
-//routes
-app.use("/create", create);
-app.use("/read", read);
-app.use("/update", update);
-app.use("/delete", del);
-app.use("/init", init);
+const pgClient = makePGClient(PG_CONNECTION_STRING);
 
-app.get("/", async (req, res) => {
+pgClient
+  .init()
+  .then(() => {
+    const app = express();
 
-  const query = `
-    SELECT * FROM Note
-    ORDER BY id;
-    `;
+    // Configuring express template engine
+    app.set("view engine", "pug");
 
-  const { rows = [] } = await db.query(query).catch((error) => { console.log(error); return [] });
-  res.render("index", { item: rows });
-});
+    // Middlewares
+    app.use(express.urlencoded({ extended: true }));
+    app.use(morgan("dev"));
 
-app.listen(3000, () => {
-  console.log("At port 3000");
-});
+    // Routes
+    app.use("/", makeIndexRouter(pgClient));
+    app.use("/create", makeCreateRouter(pgClient));
+    app.use("/read", makeReadRouter(pgClient));
+    app.use("/update", makeUpdateRouter(pgClient));
+    app.use("/delete", makeDeleteRouter(pgClient));
+
+    // Start server
+    app.listen(SERVER_PORT, () => {
+      console.log(`Application started, listening on port ${SERVER_PORT}`);
+    });
+  })
+  .catch((e) => console.log("Error starting the application", e));
