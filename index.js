@@ -9,7 +9,12 @@ const { makeReadRouter } = require("./routes/read.js");
 const { makeUpdateRouter } = require("./routes/update");
 
 const SERVER_PORT = process.env.PORT;
-const PG_CONNECTION_STRING = process.env.PG_CONNECTION_STRING;
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_NAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_PORT = process.env.DB_PORT;
+const DB_USER = process.env.DB_USER;
+const PG_CONNECTION_STRING = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 
 const pgClient = makePGClient(PG_CONNECTION_STRING);
 
