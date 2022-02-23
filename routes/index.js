@@ -1,6 +1,6 @@
 const express = require("express");
 
-function indexGETHandler(pgClient) {
+function indexGETHandler(context, pgClient) {
   return async function (_req, res) {
     const query = `SELECT * FROM Note ORDER BY id;`;
 
@@ -8,14 +8,14 @@ function indexGETHandler(pgClient) {
       console.log(error);
       return [];
     });
-    res.render("index", { item: rows });
+    res.render("index", { context, item: rows });
   };
 }
 
-function makeIndexRouter(pgClient) {
+function makeIndexRouter(context, pgClient) {
   const router = express.Router();
 
-  router.get("/", indexGETHandler(pgClient));
+  router.get("/", indexGETHandler(context, pgClient));
 
   return router;
 }

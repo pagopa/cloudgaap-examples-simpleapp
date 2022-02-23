@@ -1,19 +1,19 @@
 const express = require("express");
 
-function deleteGETHandler(pgClient) {
+function deleteGETHandler(context, pgClient) {
   return async function (req, res) {
     const query = `DELETE FROM Note WHERE id=$1 RETURNING *;`;
     const values = [req.params.id];
 
     await pgClient.query(query, values);
-    res.redirect("/");
+    res.redirect(`${context.basePath}/`);
   };
 }
 
-function makeDeleteRouter(pgClient) {
+function makeDeleteRouter(context, pgClient) {
   const router = express.Router();
 
-  router.get("/:id", deleteGETHandler(pgClient));
+  router.get("/:id", deleteGETHandler(context, pgClient));
 
   return router;
 }
