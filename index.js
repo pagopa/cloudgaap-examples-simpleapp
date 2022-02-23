@@ -22,6 +22,10 @@ const pgClient = makePGClient(PG_CONNECTION_STRING);
 pgClient
   .init()
   .then(() => {
+    const context = {
+      basePath: CGAAP_BASE_PATH,
+    };
+
     const app = express();
 
     // Configuring express template engine
@@ -35,11 +39,11 @@ pgClient
     const router = express.Router();
 
     // Routes
-    router.use("/", makeIndexRouter(pgClient));
-    router.use("/create", makeCreateRouter(pgClient));
-    router.use("/read", makeReadRouter(pgClient));
-    router.use("/update", makeUpdateRouter(pgClient));
-    router.use("/delete", makeDeleteRouter(pgClient));
+    router.use("/", makeIndexRouter(context, pgClient));
+    router.use("/create", makeCreateRouter(context, pgClient));
+    router.use("/read", makeReadRouter(context, pgClient));
+    router.use("/update", makeUpdateRouter(context, pgClient));
+    router.use("/delete", makeDeleteRouter(context, pgClient));
 
     app.use(CGAAP_BASE_PATH, router);
 

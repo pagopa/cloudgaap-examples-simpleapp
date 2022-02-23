@@ -1,27 +1,27 @@
 const express = require("express");
 
-function createGETHandler() {
+function createGETHandler(context) {
   return function (_req, res) {
-    res.render("create");
+    res.render("create", { context });
   };
 }
 
-function createPOSTHandler(pgClient) {
+function createPOSTHandler(context, pgClient) {
   return async function (req, res) {
     const query = `INSERT INTO Note(title,body) VALUES($1,$2) RETURNING *;`;
     const values = [req.body.title, req.body.body];
 
     await pgClient.query(query, values);
-    res.redirect("/");
+    res.redirect(`${context.basePath}/`);
   };
 }
 
-function makeCreateRouter(pgClient) {
+function makeCreateRouter(context, pgClient) {
   const router = express.Router();
 
-  router.get("/", createGETHandler());
+  router.get("/", createGETHandler(context));
 
-  router.post("/", createPOSTHandler(pgClient));
+  router.post("/", createPOSTHandler(context, pgClient));
 
   return router;
 }

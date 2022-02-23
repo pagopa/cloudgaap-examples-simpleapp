@@ -19,9 +19,9 @@ html
                     tr
                         td= n
                         td
-                            a(href=`/read/${data.id}`)=data.title
+                            a(href=`${context.basePath}/read/${data.id}`)=data.title
                         td
-                            a(href=`/update/${data.id}`) Update
-                            a(href=`/delete/${data.id}`) Delete
+                            a(href=`${context.basePath}/update/${data.id}`) Update
+                            a(href=`${context.basePath}/delete/${data.id}`) Delete
     br
-    a(href="/create") Create note
+    a(href=`${context.basePath}/create`) Create note

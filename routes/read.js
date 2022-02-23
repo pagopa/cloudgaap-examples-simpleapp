@@ -1,19 +1,19 @@
 const express = require("express");
 
-function readGETHandler(pgClient) {
+function readGETHandler(context, pgClient) {
   return async function (req, res) {
     const query = `SELECT * FROM Note WHERE id=$1;`;
     const values = [req.params.id];
 
     const { rows } = await pgClient.query(query, values);
-    res.render("read", { data: rows[0] });
+    res.render("read", { context, data: rows[0] });
   };
 }
 
-function makeReadRouter(pgClient) {
+function makeReadRouter(context, pgClient) {
   const router = express.Router();
 
-  router.get("/:id", readGETHandler(pgClient));
+  router.get("/:id", readGETHandler(context, pgClient));
 
   return router;
 }

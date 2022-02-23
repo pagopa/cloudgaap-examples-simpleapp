@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:default": "node -r dotenv/config index.js dotenv_config_path=.env.default",
+    "start:dev": "node -r dotenv/config index.js dotenv_config_path=.env.default",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
