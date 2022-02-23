@@ -36,7 +36,6 @@ pgClient
     const router = express.Router();
 
     router.use(express.urlencoded({ extended: true }));
-    router.use(express.static(path.join(__dirname, "public")));
 
     router.use("/", makeIndexRouter(pgClient));
     router.use("/create", makeCreateRouter(pgClient));
