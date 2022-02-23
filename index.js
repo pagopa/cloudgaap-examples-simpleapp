@@ -9,6 +9,7 @@ const { makeReadRouter } = require("./routes/read.js");
 const { makeUpdateRouter } = require("./routes/update");
 
 const SERVER_PORT = process.env.PORT;
+const CGAAP_BASE_PATH = process.env.CGAAP_BASE_PATH || "/";
 const DB_HOST = process.env.DB_HOST;
 const DB_NAME = process.env.DB_NAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
@@ -30,16 +31,23 @@ pgClient
     app.use(express.urlencoded({ extended: true }));
     app.use(morgan("dev"));
 
+    // Create main router
+    const router = express.Router();
+
     // Routes
-    app.use("/", makeIndexRouter(pgClient));
-    app.use("/create", makeCreateRouter(pgClient));
-    app.use("/read", makeReadRouter(pgClient));
-    app.use("/update", makeUpdateRouter(pgClient));
-    app.use("/delete", makeDeleteRouter(pgClient));
+    router.use("/", makeIndexRouter(pgClient));
+    router.use("/create", makeCreateRouter(pgClient));
+    router.use("/read", makeReadRouter(pgClient));
+    router.use("/update", makeUpdateRouter(pgClient));
+    router.use("/delete", makeDeleteRouter(pgClient));
+
+    app.use(CGAAP_BASE_PATH, router);
 
     // Start server
     app.listen(SERVER_PORT, () => {
-      console.log(`Application started, listening on port ${SERVER_PORT}`);
+      console.log(
+        `Application started, listening on port ${SERVER_PORT} with base path ${CGAAP_BASE_PATH}`
+      );
     });
   })
   .catch((e) => console.log("Error starting the application", e));
