@@ -6,7 +6,7 @@ function deleteGETHandler(pgClient) {
     const values = [req.params.id];
 
     await pgClient.query(query, values);
-    res.redirect("/");
+    res.redirect(`${global.baseUrl}/`);
   };
 }
 

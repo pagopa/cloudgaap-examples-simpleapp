@@ -12,7 +12,7 @@ function createPOSTHandler(pgClient) {
     const values = [req.body.title, req.body.body];
 
     await pgClient.query(query, values);
-    res.redirect("/");
+    res.redirect(`${global.baseUrl}/`);
   };
 }
 

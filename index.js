@@ -20,6 +20,8 @@ const PG_CONNECTION_STRING = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:
 
 const pgClient = makePGClient(PG_CONNECTION_STRING);
 
+global.baseUrl = CGAAP_BASE_PATH;
+
 pgClient
   .init()
   .then(() => {

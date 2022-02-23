@@ -9,8 +9,8 @@ html
         h1=data.title
         p=data.body
         br
-        a(href=`/update/${data.id}`) Update note.
+        a(href=`${global.baseUrl}/update/${data.id}`) Update note.
         br
-        a(href=`/delete/${data.id}`) Delete note.
+        a(href=`${global.baseUrl}/delete/${data.id}`) Delete note.
         br
-        a(href="/") Home
+        a(href=`${global.baseUrl}/`) Home
